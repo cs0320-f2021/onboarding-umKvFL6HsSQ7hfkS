@@ -1,11 +1,6 @@
 package edu.brown.cs.student.main;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
@@ -44,7 +39,7 @@ public final class Main {
     this.args = args;
   }
 
-  private void run() {
+  private void run() throws FileNotFoundException {
     // set up parsing of command line flags
     OptionParser parser = new OptionParser();
 
@@ -61,15 +56,25 @@ public final class Main {
     }
 
     // TODO: Add your REPL here!
+
     try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
       String input;
       while ((input = br.readLine()) != null) {
         try {
           input = input.trim();
           String[] arguments = input.split(" ");
-          System.out.println(arguments[0]);
           // TODO: complete your REPL by adding commands for addition "add" and subtraction
           //  "subtract"
+          if (arguments[0].equals("add")) {
+            MathBot addBot = new MathBot();
+            System.out.println(addBot.add(Double.valueOf(arguments[1]),
+                    Double.valueOf(arguments[2])));
+          } else if (arguments[0].equals("subtract")) {
+            MathBot subtractBot = new MathBot();
+            System.out.println(subtractBot.subtract(Double.valueOf(arguments[1]),
+                    Double.valueOf(arguments[2])));
+          }
+
         } catch (Exception e) {
           // e.printStackTrace();
           System.out.println("ERROR: We couldn't process your input");
@@ -80,7 +85,11 @@ public final class Main {
       System.out.println("ERROR: Invalid input for REPL");
     }
 
+
+
+
   }
+
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration(Configuration.VERSION_2_3_0);
