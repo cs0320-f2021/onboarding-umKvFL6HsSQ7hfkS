@@ -1,7 +1,8 @@
 package edu.brown.cs.student.main;
 
 import java.io.*;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -23,13 +24,14 @@ public final class Main {
 
   // use port 4567 by default when running server
   private static final int DEFAULT_PORT = 4567;
+  public ArrayList<Stars> StarList;
 
   /**
    * The initial method called when execution begins.
    *
    * @param args An array of command line arguments
    */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws FileNotFoundException {
     new Main(args).run();
   }
 
@@ -55,40 +57,14 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
 
-    // TODO: Add your REPL here!
 
-    try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-      String input;
-      while ((input = br.readLine()) != null) {
-        try {
-          input = input.trim();
-          String[] arguments = input.split(" ");
-          // TODO: complete your REPL by adding commands for addition "add" and subtraction
-          //  "subtract"
-          if (arguments[0].equals("add")) {
-            MathBot addBot = new MathBot();
-            System.out.println(addBot.add(Double.valueOf(arguments[1]),
-                    Double.valueOf(arguments[2])));
-          } else if (arguments[0].equals("subtract")) {
-            MathBot subtractBot = new MathBot();
-            System.out.println(subtractBot.subtract(Double.valueOf(arguments[1]),
-                    Double.valueOf(arguments[2])));
-          }
-
-        } catch (Exception e) {
-          // e.printStackTrace();
-          System.out.println("ERROR: We couldn't process your input");
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("ERROR: Invalid input for REPL");
-    }
 
 
 
 
   }
+
+
 
 
   private static FreeMarkerEngine createEngine() {
@@ -159,4 +135,5 @@ public final class Main {
       return new ModelAndView(variables, "main.ftl");
     }
   }
+
 }

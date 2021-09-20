@@ -1,50 +1,78 @@
 package edu.brown.cs.student.main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
+import java.lang.Math;
+import java.util.stream.Collectors;
+
 
 public class NaiveNeighbors {
     private int k;
     private String name;
-    private int x;
-    private int y;
-    private int z;
+    private double x;
+    private double y;
+    private double z;
 
-    public NaiveNeighbors (int k, String name, int x, int y, int z){
+    public NaiveNeighbors(int k, String name, double x, double y, double z) {
         this.k = k;
         this.name = name;
         this.x = x;
         this.y = y;
         this.z = z;
-
     }
 
-    public ArrayList getWithCoord(int k, int x, int y, int z){
-        ArrayList<> neighId = new ArrayList<>(Arrays.asList(k, x, y, z));
-        return neighId;
+//    public ArrayList<Integer> getWithCoord(double k, double x, double y, double z){
+//        //ArrayList<> neighbId = new ArrayList<>(Arrays.asList(k, x, y, z));
+//        //use distance formula somewhere
+//        Stars neighbStarInfo = new Stars(id, name, x, y, z);
+//        ArrayList<Integer> neighbId = new ArrayList<>();
+//        return neighbId;
+//    }
+
+
+    public static List<Integer> kClosestNeighbors(StarList l, int k, Stars star) {
+        List<Stars> list = l.getStarsList();
+        Collections.shuffle(list);
+        Collections.sort(list, new Comparator<Stars>() {
+            @Override
+            public int compare(Stars o1, Stars o2) {
+                // if the first object is greater than the second you return a positive number
+                double Star1dist = o1.getDist(star.getX(), star.getY(), star.getZ());
+                double Star2dist = o2.getDist(star.getX(), star.getY(), star.getZ());
+                if (Star1dist > Star2dist) {
+                    return 1;
+                } else if (Star1dist < Star2dist) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        // firstKElements is list of k closest stars
+        List<Stars> firstKElementsList =
+                list.stream().limit(k).collect(Collectors.toList());
+        // idList is list of id's of those k closest stars
+        List<Integer> idList =
+                firstKElementsList.stream().map(Stars::getId).collect(Collectors.toList());
+        return idList;
     }
 
-    public HashMap<String, Integer> getWithName(String name, int k){
-        HashMap<String, Integer> mapOfNeighbInfo = new HashMap<String, Integer>();
-        if(k > 0){
-            mapOfNeighbInfo.put(name, k);
-            return mapOfNeighbInfo;
+    public static Stars findStar(String starName, StarList list) {
+        //Iterate through the list
+        List<Stars> l = list.getStarsList();
+        Iterator<Stars> it = l.iterator();
+        for (Stars star : l) {
+            star.getName();
+            // -- If star.name == starName return star (stream returns boolean)
+            //if (l.stream().anyMatch(item -> starName.equals(Stars.getName()))){
+            if (star.getName().equals(starName)) {
+                return star;
+            }
+
         }
     }
+
+
 }
 
-/*     try {
-           if (k > 0){
-               ArrayList<Integer> neighborInfo =
-                       new ArrayList<>(Arrays.asList(k, x, y, z));
-               return neighborInfo;
 
-           }
 
-        } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("ERROR: Invalid input for REPL");
-        }
-
- */
